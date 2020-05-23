@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The test environment is used exclusively to run your application's
 # test suite. You never need to work with it otherwise. Remember that
 # your test database is "scratch space" for the test suite and is wiped
@@ -26,7 +28,7 @@ Rails.application.configure do
   config.cache_store = :null_store
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  config.action_dispatch.show_exceptions = true
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false

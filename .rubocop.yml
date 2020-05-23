@@ -1,0 +1,65 @@
+---
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 120
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Metrics/AbcSize:
+  Exclude:
+    - db/migrate/*.rb
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+
+Metrics/MethodLength:
+  Exclude:
+    - db/migrate/*.rb
+
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - spec/integration/**/*.rb
+
+RSpec/ScatteredSetup:
+  Exclude:
+    - spec/integration/**/*.rb
+
+Style/Documentation:
+  Exclude:
+    - app/mailers/application_mailer.rb
+    - app/models/application_record.rb
+    - config/application.rb
+    - db/migrate/*.rb
+
+Style/ExponentialNotation:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true

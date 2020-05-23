@@ -1,0 +1,13 @@
+---
+detectors:
+  IrresponsibleModule:
+    enabled: false
+  UncommunicativeModuleName:
+    accept:
+      - "V\\d+"
+  UtilityFunction:
+    public_methods_only: true
+
+exclude_paths:
+  - db/migrate
+  - vendor/bundle
