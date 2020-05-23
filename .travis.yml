@@ -2,10 +2,6 @@
 language: ruby
 dist: bionic
 addons:
-  postgresql: "12"
-  apt:
-    packages:
-      - postgresql-12
-      - postgresql-client-12
+  postgresql: "11"
 before_script:
   - bin/rails db:setup

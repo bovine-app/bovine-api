@@ -7,7 +7,7 @@ API server for the Bovine podcatcher-on-Rails.
 ### Requirements
 
 - Ruby 2.7
-- PostgreSQL 12
+- PostgreSQL 11+
 
 ### Usage
 
