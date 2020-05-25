@@ -90,6 +90,7 @@ GEM
     jaro_winkler (1.5.4)
     json-schema (2.8.1)
       addressable (>= 2.4)
+    jwt (2.2.1)
     kwalify (0.7.2)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -262,6 +263,7 @@ DEPENDENCIES
   byebug
   factory_bot_rails
   faker
+  jwt (~> 2.2)
   listen (~> 3.2)
   overcommit
   pg (>= 0.18, < 2.0)

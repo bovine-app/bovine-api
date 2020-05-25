@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   has_secure_password
 
+  has_many :sessions, dependent: :delete_all
+
   validates :email, presence: true, uniqueness: true
   validates :password, length: { minimum: 8, allow_nil: true }, presence: { if: :password_confirmation }
   validates :password_confirmation, presence: { if: :password }
