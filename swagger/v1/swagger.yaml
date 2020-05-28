@@ -30,10 +30,49 @@ paths:
                     - updated_at
         '400':
           description: missing parameters
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - message
+                - parameter
+                properties:
+                  message:
+                    type: string
+                  parameter:
+                    type: string
         '422':
           description: validation falied
-          content: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - message
+                - errors
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        field:
+                          type: string
+                        details:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              error:
+                                type: string
+                            required:
+                            - error
+                      required:
+                      - field
+                      - details
       requestBody:
         content:
           application/json:
@@ -48,6 +87,25 @@ paths:
                   - password_confirmation
               required:
               - user
+    get:
+      summary: Get the current user
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: current user
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - user
+                properties:
+                  user:
+                    "$ref": "#/components/schemas/user"
+        '401':
+          description: unauthorized
+          content: {}
 components:
   schemas:
     user:

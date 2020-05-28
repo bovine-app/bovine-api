@@ -3,6 +3,8 @@
 module V1
   # User account self-management API controller.
   class UsersController < ApplicationController
+    before_action :current_user, except: %i[create]
+
     def create
       @current_user = User.create!(user_create_params)
 

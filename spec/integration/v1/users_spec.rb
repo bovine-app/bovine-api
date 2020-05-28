@@ -21,7 +21,7 @@ RSpec.describe 'V1::Users', type: :request do
         required: %w[user]
       }
 
-      let(:base_user) { FactoryBot.build(:user) }
+      let(:base_user) { build(:user) }
       let(:user) do
         { 'user' => {
           email: base_user.email,
@@ -82,6 +82,35 @@ RSpec.describe 'V1::Users', type: :request do
           user['user']['password'] = user['user']['password_confirmation'] =
             Faker::Internet.password(min_length: 7, max_length: 7)
         end
+
+        run_test!
+      end
+    end
+
+    get 'Get the current user' do
+      produces 'application/json'
+      security [bearer: []]
+
+      let(:user) { create(:user) }
+
+      response '200', 'current user' do
+        schema type: :object, required: %w[user], properties: {
+          user: { '$ref': '#/components/schemas/user' }
+        }
+
+        let(:Authorization) do
+          session = user.sessions.create!(
+            created_from: Faker::Internet.public_ip_v4_address,
+            user_agent: Faker::Internet.user_agent
+          )
+          "Bearer #{session.to_jwt}"
+        end
+
+        run_test!
+      end
+
+      response '401', 'unauthorized' do
+        let(:Authorization) { nil }
 
         run_test!
       end
