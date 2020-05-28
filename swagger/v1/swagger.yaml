@@ -3,7 +3,78 @@ openapi: 3.0.1
 info:
   title: Bovine API V1
   version: v1
-paths: {}
+paths:
+  "/v1/user":
+    post:
+      summary: Create a new user
+      parameters: []
+      responses:
+        '201':
+          description: user created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - token
+                - user
+                properties:
+                  token:
+                    type: string
+                  user:
+                    "$ref": "#/components/schemas/user"
+                    required:
+                    - id
+                    - email
+                    - created_at
+                    - updated_at
+        '400':
+          description: missing parameters
+          content: {}
+        '422':
+          description: validation falied
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  "$ref": "#/components/schemas/user"
+                  required:
+                  - email
+                  - password
+                  - password_confirmation
+              required:
+              - user
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          readOnly: true
+        updated_at:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+        password_confirmation:
+          type: string
+          writeOnly: true
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 servers:
 - url: https://{defaultHost}
   variables:

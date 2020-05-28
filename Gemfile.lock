@@ -60,6 +60,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.0)
     backport (1.1.2)
+    bcrypt (3.1.13)
     benchmark (0.1.0)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
@@ -87,8 +88,11 @@ GEM
       concurrent-ruby (~> 1.0)
     iniparse (1.5.0)
     jaro_winkler (1.5.4)
+    jbuilder (2.10.0)
+      activesupport (>= 5.0.0)
     json-schema (2.8.1)
       addressable (>= 2.4)
+    jwt (2.2.1)
     kwalify (0.7.2)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -128,6 +132,8 @@ GEM
     puma (4.3.5)
       nio4r (~> 2.0)
     rack (2.2.2)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.3.1)
@@ -255,16 +261,20 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   brakeman
   byebug
   factory_bot_rails
   faker
+  jbuilder (~> 2.7)
+  jwt (~> 2.2)
   listen (~> 3.2)
   overcommit
   pg (>= 0.18, < 2.0)
   pry-byebug
   puma (~> 4.1)
+  rack-cors
   rails (~> 6.0.3, >= 6.0.3.1)
   reek
   rspec-rails (~> 4.0)
