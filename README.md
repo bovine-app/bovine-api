@@ -18,6 +18,12 @@ bin/setup
 bin/rails s
 ```
 
+### Testing
+
+```bash
+bin/rspec
+```
+
 ## Copyright
 
 Copyright © 2020 Jesse B. Hannah. Licensed under the terms of the GNU Affero
