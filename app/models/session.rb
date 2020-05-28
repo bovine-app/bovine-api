@@ -5,7 +5,7 @@
 class Session < ApplicationRecord
   JWT_ALGORITHM = 'HS256'
   JWT_DECODE_OPTS = { algorithm: JWT_ALGORITHM, nbf_leeway: 30, verify_iat: true }.freeze
-  JWT_SECRET = Rails.application.secrets.secret_key_base
+  JWT_SECRET = Rails.application.credentials.secret_key_base
 
   belongs_to :user
 
