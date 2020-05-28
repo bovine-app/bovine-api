@@ -13,6 +13,7 @@ class ApplicationController < ActionController::API
 
   rescue_from ActionController::ParameterMissing, with: :rescue_parameter_missing
   rescue_from ActiveRecord::RecordInvalid, with: :rescue_record_invalid
+  rescue_from Errors::BaseError, with: :rescue_error
 
   protected
 
@@ -25,12 +26,7 @@ class ApplicationController < ActionController::API
   def current_user
     @current_user ||= jwt.user
   rescue ActiveRecord::RecordNotFound
-    unauthorized
-  end
-
-  def unauthorized
-    reset_session
-    head :unauthorized
+    raise Errors::UnauthorizedError
   end
 
   private
@@ -48,7 +44,7 @@ class ApplicationController < ActionController::API
          JWT::ExpiredSignature,
          JWT::ImmatureSignature,
          JWT::VerificationError
-    unauthorized
+    raise Errors::UnauthorizedError
   end
 
   def rescue_parameter_missing(exception)
@@ -68,6 +64,11 @@ class ApplicationController < ActionController::API
         }
       end
     }
+  end
+
+  def rescue_error(exception)
+    exception.handle(self)
+    head exception.code
   end
 
   def set_csrf_cookie
