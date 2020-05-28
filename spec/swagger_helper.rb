@@ -23,6 +23,19 @@ RSpec.configure do |config|
       },
       paths: {},
       components: {
+        schemas: {
+          user: {
+            type: :object,
+            properties: {
+              id: { type: :string, readOnly: true },
+              created_at: { type: :string, readOnly: true },
+              updated_at: { type: :string, readOnly: true },
+              email: { type: :string },
+              password: { type: :string, writeOnly: true },
+              password_confirmation: { type: :string, writeOnly: true }
+            }
+          }
+        },
         securitySchemes: {
           bearer: {
             type: :http,
