@@ -11,6 +11,9 @@ class ApplicationController < ActionController::API
 
   after_action :set_csrf_cookie, unless: -> { session.empty? }
 
+  rescue_from ActionController::ParameterMissing, with: :rescue_parameter_missing
+  rescue_from ActiveRecord::RecordInvalid, with: :rescue_record_invalid
+
   protected
 
   # Allow forgery protection unless it is explicitly disabled in the environment
@@ -46,6 +49,25 @@ class ApplicationController < ActionController::API
          JWT::ImmatureSignature,
          JWT::VerificationError
     unauthorized
+  end
+
+  def rescue_parameter_missing(exception)
+    render status: :bad_request, json: {
+      message: 'Parameter Missing',
+      parameter: exception.param
+    }
+  end
+
+  def rescue_record_invalid(exception)
+    render status: :unprocessable_entity, json: {
+      message: 'Validation Failed',
+      errors: exception.record.errors.details.map do |field, details|
+        {
+          field: field,
+          details: details
+        }
+      end
+    }
   end
 
   def set_csrf_cookie

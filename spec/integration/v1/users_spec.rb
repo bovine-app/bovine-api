@@ -43,12 +43,41 @@ RSpec.describe 'V1::Users', type: :request do
       end
 
       response '400', 'missing parameters' do
+        schema type: :object, required: %w[message parameter], properties: {
+          message: { type: :string },
+          parameter: { type: :string }
+        }
+
         before { user['user']['email'] = nil }
 
         run_test!
       end
 
       response '422', 'validation falied' do
+        schema type: :object, required: %w[message errors], properties: {
+          message: { type: :string },
+          errors: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                field: { type: :string },
+                details: {
+                  type: :array,
+                  items: {
+                    type: :object,
+                    properties: {
+                      error: { type: :string }
+                    },
+                    required: %w[error]
+                  }
+                }
+              },
+              required: %w[field details]
+            }
+          }
+        }
+
         before do
           user['user']['password'] = user['user']['password_confirmation'] =
             Faker::Internet.password(min_length: 7, max_length: 7)
