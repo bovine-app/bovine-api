@@ -34,6 +34,33 @@ RSpec.configure do |config|
               password: { type: :string, writeOnly: true },
               password_confirmation: { type: :string, writeOnly: true }
             }
+          },
+          validationErrors: {
+            type: :object,
+            required: %w[message errors],
+            properties: {
+              message: { type: :string },
+              errors: {
+                type: :array,
+                items: {
+                  type: :object,
+                  properties: {
+                    field: { type: :string },
+                    details: {
+                      type: :array,
+                      items: {
+                        type: :object,
+                        properties: {
+                          error: { type: :string }
+                        },
+                        required: %w[error]
+                      }
+                    }
+                  },
+                  required: %w[field details]
+                }
+              }
+            }
           }
         },
         securitySchemes: {

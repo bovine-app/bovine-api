@@ -24,4 +24,11 @@ module Errors
       controller.reset_session
     end
   end
+
+  # Represents an HTTP 403 Forbidden error.
+  class ForbiddenError < BaseError
+    def code
+      :forbidden
+    end
+  end
 end
