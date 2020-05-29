@@ -4,6 +4,7 @@ module V1
   # User account self-management API controller.
   class UsersController < ApplicationController
     before_action :current_user, except: %i[create]
+    before_action :require_current_password, only: %i[update destroy]
 
     def create
       @current_user = User.create!(user_create_params)
@@ -18,11 +19,19 @@ module V1
 
     def show; end
 
-    def udpate; end
+    def update
+      current_user.update!(user_params)
+
+      render action: :show
+    end
 
     def destroy; end
 
     private
+
+    def current_password
+      params.require(:current_password)
+    end
 
     def pass_token(token)
       if session.empty?
@@ -31,6 +40,10 @@ module V1
         reset_session
         session[:jwt] = token
       end
+    end
+
+    def require_current_password
+      raise Errors::ForbiddenError unless current_user.authenticate(current_password)
     end
 
     def user_params

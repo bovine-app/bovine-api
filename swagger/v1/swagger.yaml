@@ -47,32 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                - message
-                - errors
-                properties:
-                  message:
-                    type: string
-                  errors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        field:
-                          type: string
-                        details:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              error:
-                                type: string
-                            required:
-                            - error
-                      required:
-                      - field
-                      - details
+                "$ref": "#/components/schemas/validationErrors"
       requestBody:
         content:
           application/json:
@@ -106,6 +81,68 @@ paths:
         '401':
           description: unauthorized
           content: {}
+    put:
+      summary: Update the current user
+      security:
+      - bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: user updated
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - user
+                properties:
+                  user:
+                    "$ref": "#/components/schemas/user"
+                    required:
+                    - id
+                    - email
+                    - created_at
+                    - updated_at
+        '400':
+          description: missing parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - message
+                - parameter
+                properties:
+                  message:
+                    type: string
+                  parameter:
+                    type: string
+        '401':
+          description: unauthorized
+          content: {}
+        '422':
+          description: validation falied
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/validationErrors"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  "$ref": "#/components/schemas/user"
+                  required:
+                  - email
+                  - password
+                  - password_confirmation
+                current_password:
+                  type: string
+              required:
+              - user
+              - current_password
 components:
   schemas:
     user:
@@ -128,6 +165,33 @@ components:
         password_confirmation:
           type: string
           writeOnly: true
+    validationErrors:
+      type: object
+      required:
+      - message
+      - errors
+      properties:
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                  required:
+                  - error
+            required:
+            - field
+            - details
   securitySchemes:
     bearer:
       type: http
