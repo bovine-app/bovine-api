@@ -58,7 +58,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    ast (2.4.0)
+    ast (2.4.1)
     backport (1.1.2)
     bcrypt (3.1.13)
     benchmark (0.1.0)
@@ -172,6 +172,7 @@ GEM
       parser (>= 2.5.0.0, < 2.8, != 2.5.1.1)
       psych (~> 3.1.0)
       rainbow (>= 2.0, < 4.0)
+    regexp_parser (1.7.1)
     reverse_markdown (2.0.0)
       nokogiri
     rexml (3.2.4)
@@ -201,10 +202,11 @@ GEM
     rswag-ui (2.3.1)
       actionpack (>= 3.1, < 7.0)
       railties (>= 3.1, < 7.0)
-    rubocop (0.84.0)
+    rubocop (0.85.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.7)
       rexml
       rubocop-ast (>= 0.0.3)
       ruby-progressbar (~> 1.7)
@@ -217,7 +219,7 @@ GEM
       activesupport
       rack (>= 1.1)
       rubocop (>= 0.72.0)
-    rubocop-rspec (1.39.0)
+    rubocop-rspec (1.40.0)
       rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
     solargraph (0.39.8)
