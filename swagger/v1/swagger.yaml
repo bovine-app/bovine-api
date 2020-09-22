@@ -120,6 +120,9 @@ paths:
         '401':
           description: unauthorized
           content: {}
+        '403':
+          description: forbidden
+          content: {}
         '422':
           description: validation falied
           content:
@@ -142,6 +145,34 @@ paths:
                   type: string
               required:
               - user
+              - current_password
+    delete:
+      summary: Delete the current user
+      security:
+      - bearer: []
+      parameters: []
+      responses:
+        '204':
+          description: user deleted
+          content: {}
+        '400':
+          description: missing parameters
+          content: {}
+        '401':
+          description: unauthorized
+          content: {}
+        '403':
+          description: forbidden
+          content: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+              required:
               - current_password
 components:
   schemas:
