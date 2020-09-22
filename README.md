@@ -1,6 +1,7 @@
 # Bovine
 
-[![Build Status](https://travis-ci.com/bovine-app/bovine-api.svg?branch=master)](https://travis-ci.com/bovine-app/bovine-api)
+[![Build Status](https://travis-ci.com/bovine-app/bovine-api.svg?branch=trunk)](https://travis-ci.com/bovine-app/bovine-api)
+[![Coverage Status](https://coveralls.io/repos/github/bovine-app/bovine-api/badge.svg?branch=trunk)](https://coveralls.io/github/bovine-app/bovine-api?branch=trunk)
 
 API server for the Bovine podcatcher-on-Rails.
 

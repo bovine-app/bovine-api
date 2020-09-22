@@ -32,11 +32,11 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'pry-byebug'
 
+  gem 'coveralls'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-rails', '~> 4.0'
   gem 'rswag-specs'
-  gem 'simplecov'
 end
 
 group :development do
