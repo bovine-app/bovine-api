@@ -41,7 +41,10 @@ RSpec.describe 'V1::Users', type: :request do
           }
         }
 
-        run_test!
+        run_test! do |response|
+          data = JSON.parse(response.body).with_indifferent_access
+          expect(User.find(data[:user][:id]).email).to eql base_user.email
+        end
       end
 
       response '400', 'missing parameters' do
@@ -123,11 +126,13 @@ RSpec.describe 'V1::Users', type: :request do
         "Bearer #{session.to_jwt}"
       end
 
+      let(:email) { Faker::Internet.safe_email }
+
       let(:user) do
         {
           current_password: current_user.password,
           user: {
-            email: Faker::Internet.safe_email
+            email: email
           }
         }
       end
@@ -140,7 +145,11 @@ RSpec.describe 'V1::Users', type: :request do
           }
         }
 
-        run_test!
+        run_test! do |response|
+          data = JSON.parse(response.body).with_indifferent_access
+          expect(data[:user][:email]).to eql email
+          expect(User.find(current_user.id).email).to eql email
+        end
       end
 
       response '400', 'missing parameters' do
@@ -156,6 +165,12 @@ RSpec.describe 'V1::Users', type: :request do
 
       response '401', 'unauthorized' do
         let(:Authorization) { nil }
+
+        run_test!
+      end
+
+      response '403', 'forbidden' do
+        before { user[:current_password] = Faker::Internet.password }
 
         run_test!
       end
