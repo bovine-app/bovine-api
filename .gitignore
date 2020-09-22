@@ -28,3 +28,6 @@
 
 # Ignore RSpec examples persistence file.
 /spec/examples.txt
+
+# Ignore code coverage output
+/coverage
