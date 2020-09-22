@@ -4,23 +4,11 @@ require:
   - rubocop-rails
   - rubocop-rspec
 
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
+AllCops:
+  NewCops: enable
 
 Layout/LineLength:
   Max: 120
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
 
 Metrics/AbcSize:
   Exclude:
@@ -42,24 +30,13 @@ RSpec/ScatteredSetup:
   Exclude:
     - spec/integration/**/*.rb
 
+RSpec/VariableName:
+  Exclude:
+    - spec/integration/**/*.rb
+
 Style/Documentation:
   Exclude:
     - app/mailers/application_mailer.rb
     - app/models/application_record.rb
     - config/application.rb
     - db/migrate/*.rb
-
-Style/ExponentialNotation:
-  Enabled: true
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-Style/SlicingWithRange:
-  Enabled: true
