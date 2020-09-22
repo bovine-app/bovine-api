@@ -25,7 +25,11 @@ module V1
       render action: :show
     end
 
-    def destroy; end
+    def destroy
+      current_user.destroy!
+
+      head :no_content
+    end
 
     private
 

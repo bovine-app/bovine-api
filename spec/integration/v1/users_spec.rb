@@ -41,7 +41,10 @@ RSpec.describe 'V1::Users', type: :request do
           }
         }
 
-        run_test!
+        run_test! do |response|
+          data = JSON.parse(response.body).with_indifferent_access
+          expect(User.find(data[:user][:id]).email).to eql base_user.email
+        end
       end
 
       response '400', 'missing parameters' do
@@ -123,11 +126,13 @@ RSpec.describe 'V1::Users', type: :request do
         "Bearer #{session.to_jwt}"
       end
 
+      let(:email) { Faker::Internet.safe_email }
+
       let(:user) do
         {
           current_password: current_user.password,
           user: {
-            email: Faker::Internet.safe_email
+            email: email
           }
         }
       end
@@ -140,7 +145,11 @@ RSpec.describe 'V1::Users', type: :request do
           }
         }
 
-        run_test!
+        run_test! do |response|
+          data = JSON.parse(response.body).with_indifferent_access
+          expect(data[:user][:email]).to eql email
+          expect(User.find(current_user.id).email).to eql email
+        end
       end
 
       response '400', 'missing parameters' do
@@ -160,6 +169,12 @@ RSpec.describe 'V1::Users', type: :request do
         run_test!
       end
 
+      response '403', 'forbidden' do
+        before { user[:current_password] = Faker::Internet.password }
+
+        run_test!
+      end
+
       response '422', 'validation falied' do
         schema '$ref': '#/components/schemas/validationErrors'
 
@@ -167,6 +182,64 @@ RSpec.describe 'V1::Users', type: :request do
           user[:user][:password] = user[:user][:password_confirmation] =
             Faker::Internet.password(min_length: 7, max_length: 7)
         end
+
+        run_test!
+      end
+    end
+
+    delete 'Delete the current user' do
+      consumes 'application/json'
+      security [bearer: []]
+
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        properties: {
+          current_password: { type: :string }
+        },
+        required: %w[current_password]
+      }
+
+      let(:current_user) { create(:user) }
+
+      let(:Authorization) do
+        session = current_user.sessions.create!(
+          created_from: Faker::Internet.public_ip_v4_address,
+          user_agent: Faker::Internet.user_agent
+        )
+        "Bearer #{session.to_jwt}"
+      end
+
+      let(:user) do
+        {
+          current_password: current_user.password
+        }
+      end
+
+      response '204', 'user deleted' do
+        run_test! do
+          expect { User.find(current_user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      response '400', 'missing parameters' do
+        schema type: :object, required: %w[message parameter], properties: {
+          message: { type: :string },
+          parameter: { type: :string }
+        }
+
+        before { user[:current_password] = nil }
+
+        run_test!
+      end
+
+      response '401', 'unauthorized' do
+        let(:Authorization) { nil }
+
+        run_test!
+      end
+
+      response '403', 'forbidden' do
+        before { user[:current_password] = Faker::Internet.password }
 
         run_test!
       end
