@@ -1,6 +1,6 @@
 # Bovine
 
-[![Build Status](https://travis-ci.com/bovine-app/bovine.svg?branch=master)](https://travis-ci.com/bovine-app/bovine)
+[![Build Status](https://travis-ci.com/bovine-app/bovine-api.svg?branch=master)](https://travis-ci.com/bovine-app/bovine-api)
 
 API server for the Bovine podcatcher-on-Rails.
 
