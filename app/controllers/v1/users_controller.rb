@@ -40,11 +40,11 @@ module V1
     end
 
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
+      @user_params ||= params.require(:user).permit(:email, :password, :password_confirmation)
     end
 
     def user_create_params
-      user_params.tap do |param|
+      @user_create_params ||= user_params.tap do |param|
         param.require(%i[email password password_confirmation])
       end
     end
