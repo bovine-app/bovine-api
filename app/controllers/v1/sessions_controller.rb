@@ -14,7 +14,12 @@ module V1
       render 'v1/users/show', status: :created
     end
 
-    def destroy; end
+    def destroy
+      current_session.destroy!
+      reset_session unless session.empty?
+
+      head :no_content
+    end
 
     private
 

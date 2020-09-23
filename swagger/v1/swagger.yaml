@@ -46,6 +46,17 @@ paths:
                   - password
               required:
               - session
+    delete:
+      summary: Delete the current session
+      security:
+      - bearer: []
+      responses:
+        '204':
+          description: session deleted
+          content: {}
+        '401':
+          description: unauthorized
+          content: {}
   "/v1/user":
     post:
       summary: Create a new user
