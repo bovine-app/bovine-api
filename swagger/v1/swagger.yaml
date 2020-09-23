@@ -4,6 +4,48 @@ info:
   title: Bovine API V1
   version: v1
 paths:
+  "/v1/session":
+    post:
+      summary: Create a new session
+      parameters: []
+      responses:
+        '201':
+          description: session created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - token
+                - user
+                properties:
+                  token:
+                    type: string
+                  user:
+                    "$ref": "#/components/schemas/user"
+                    required:
+                    - id
+                    - email
+                    - created_at
+                    - updated_at
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - email
+                  - password
+              required:
+              - session
   "/v1/user":
     post:
       summary: Create a new user
