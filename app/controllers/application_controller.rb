@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::RequestForgeryProtection
 
-  helper_method :current_user
+  helper_method :current_session, :current_user
 
   protect_from_forgery with: :null_session
 
@@ -23,8 +23,20 @@ class ApplicationController < ActionController::API
     Rails.application.config.action_controller.allow_forgery_protection != false
   end
 
+  def current_session
+    @current_session ||= Session.from_jwt(session.empty? ? bearer_token : session[:jwt]).tap do |sess|
+      sess.update!(last_accessed_from: request.remote_ip, last_accessed_at: Time.zone.now)
+    end
+  rescue ActiveRecord::RecordNotFound,
+         JWT::DecodeError,
+         JWT::ExpiredSignature,
+         JWT::ImmatureSignature,
+         JWT::VerificationError
+    raise Errors::UnauthorizedError
+  end
+
   def current_user
-    @current_user ||= jwt.user
+    @current_user ||= current_session.user
   rescue ActiveRecord::RecordNotFound
     raise Errors::UnauthorizedError
   end
@@ -33,18 +45,6 @@ class ApplicationController < ActionController::API
 
   def bearer_token
     request.authorization&.match(/\ABearer (\S+)\z/)&.captures&.first
-  end
-
-  def jwt
-    @jwt ||= Session.from_jwt(session.empty? ? bearer_token : session[:jwt]).tap do |jwt|
-      jwt.update!(last_accessed_from: request.remote_ip, last_accessed_at: Time.zone.now)
-    end
-  rescue ActiveRecord::RecordNotFound,
-         JWT::DecodeError,
-         JWT::ExpiredSignature,
-         JWT::ImmatureSignature,
-         JWT::VerificationError
-    raise Errors::UnauthorizedError
   end
 
   def rescue_parameter_missing(exception)
