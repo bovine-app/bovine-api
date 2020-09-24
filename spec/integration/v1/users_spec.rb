@@ -3,7 +3,10 @@
 require 'swagger_helper'
 
 RSpec.describe 'V1::Users', type: :request do
-  # header :user_agent, Faker::Internet.user_agent
+  let(:current_user) { create(:user) }
+  let(:current_session) { create(:session, user: current_user) }
+
+  let(:Authorization) { "Bearer #{current_session.to_jwt}" }
 
   path '/v1/user' do
     post 'Create a new user' do
@@ -21,8 +24,8 @@ RSpec.describe 'V1::Users', type: :request do
         required: %w[user]
       }
 
-      let(:base_user) { build(:user) }
       let(:user) do
+        base_user = build(:user)
         {
           user: {
             email: base_user.email,
@@ -43,7 +46,7 @@ RSpec.describe 'V1::Users', type: :request do
 
         run_test! do |response|
           data = JSON.parse(response.body).with_indifferent_access
-          expect(User.find(data[:user][:id]).email).to eql base_user.email
+          expect(User.find(data[:user][:id]).email).to eql user[:user][:email]
         end
       end
 
@@ -74,22 +77,14 @@ RSpec.describe 'V1::Users', type: :request do
       produces 'application/json'
       security [bearer: []]
 
-      let(:user) { create(:user) }
-
       response '200', 'current user' do
         schema type: :object, required: %w[user], properties: {
           user: { '$ref': '#/components/schemas/user' }
         }
 
-        let(:Authorization) do
-          session = user.sessions.create!(
-            created_from: Faker::Internet.public_ip_v4_address,
-            user_agent: Faker::Internet.user_agent
-          )
-          "Bearer #{session.to_jwt}"
+        test_with_response! do |data|
+          expect(data[:user][:id]).to eql current_user.id
         end
-
-        run_test!
       end
 
       response '401', 'unauthorized' do
@@ -116,16 +111,6 @@ RSpec.describe 'V1::Users', type: :request do
         required: %w[user current_password]
       }
 
-      let(:current_user) { create(:user) }
-
-      let(:Authorization) do
-        session = current_user.sessions.create!(
-          created_from: Faker::Internet.public_ip_v4_address,
-          user_agent: Faker::Internet.user_agent
-        )
-        "Bearer #{session.to_jwt}"
-      end
-
       let(:email) { Faker::Internet.safe_email }
 
       let(:user) do
@@ -145,8 +130,7 @@ RSpec.describe 'V1::Users', type: :request do
           }
         }
 
-        run_test! do |response|
-          data = JSON.parse(response.body).with_indifferent_access
+        test_with_response! do |data|
           expect(data[:user][:email]).to eql email
           expect(User.find(current_user.id).email).to eql email
         end

@@ -2,7 +2,38 @@
 
 require 'rails_helper'
 
+# Helpers for RSwag example groups.
+module SwaggerGroupHelpers
+  def test_with_response!(&block)
+    submit_request!
+
+    it "returns a #{metadata[:response][:code]} response" do |example|
+      assert_response_matches_metadata(metadata, &block)
+      parse_data_and_call(example, &block)
+    end
+  end
+
+  private
+
+  def submit_request!
+    let(:metadata) { |example| example.metadata }
+
+    before { submit_request(metadata) }
+  end
+end
+
+# Helpers for RSwag examples.
+module SwaggerExampleHelpers
+  def parse_data_and_call(example, &block)
+    data = JSON.parse(response.body).with_indifferent_access
+    example.instance_exec(data, &block) if block_given?
+  end
+end
+
 RSpec.configure do |config|
+  config.extend SwaggerGroupHelpers
+  config.include SwaggerExampleHelpers
+
   # Specify a root folder where Swagger JSON files are generated
   # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
   # to ensure that it's configured to serve Swagger from the same folder

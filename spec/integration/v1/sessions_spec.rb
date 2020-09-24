@@ -46,7 +46,9 @@ RSpec.describe 'V1::Sessions', type: :request do
           }
         }
 
-        run_test!
+        test_with_response! do |data|
+          expect(data[:user][:id]).to eql current_user.id
+        end
       end
     end
 

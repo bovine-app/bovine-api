@@ -40,3 +40,7 @@ Style/Documentation:
     - app/models/application_record.rb
     - config/application.rb
     - db/migrate/*.rb
+
+Style/SymbolProc:
+  Exclude:
+    - spec/**/*.rb
