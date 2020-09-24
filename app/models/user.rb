@@ -14,15 +14,6 @@ class User < ApplicationRecord
 
   before_validation :downcase_email
 
-  # Protect the user's password from being exposed in serialization of the user
-  # object.
-  def serializable_hash(options = {})
-    (options[:except] ||= []).push(*PROTECTED_ATTRIBUTES).uniq!
-    %i[methods only].each { |opt| reject_protected_attributes options[opt] }
-
-    super
-  end
-
   private
 
   # Downcase the user's email address before validation to avoid the cost of
@@ -43,9 +34,5 @@ class User < ApplicationRecord
 
   def password_digest=(val) # rubocop:disable Lint/UselessMethodDefinition
     super
-  end
-
-  def reject_protected_attributes(array)
-    array&.reject! { |val| PROTECTED_ATTRIBUTES.include?(val) }
   end
 end
