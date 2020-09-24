@@ -17,7 +17,7 @@ class Session < ApplicationRecord
   class << self
     def from_jwt(jwt)
       payload, = JWT.decode(jwt, JWT_SECRET, true, JWT_DECODE_OPTS)
-      find_by!(id: payload['jti'], user_id: payload['sub'])
+      active.find_by!(id: payload['jti'], user_id: payload['sub'])
     end
   end
 
