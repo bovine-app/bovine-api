@@ -7,8 +7,9 @@ class ApplicationRecord < ActiveRecord::Base
 
   # Prevent protected attributes of the model from being exposed in serialized
   # representations of the model.
-  def serializable_hash(options = {})
-    (options[:except] ||= []).push(*self.class::PROTECTED_ATTRIBUTES).uniq!
+  def serializable_hash(options = nil)
+    options = options&.dup || {}
+    (options[:except] ||= []).push(*(self.class::PROTECTED_ATTRIBUTES || [])).uniq!
     %i[methods only].each { |opt| reject_protected_attributes options[opt] }
 
     super
