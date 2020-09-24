@@ -42,4 +42,12 @@ class Session < ApplicationRecord
   def extend_life
     self.expires_at = 30.days.from_now
   end
+
+  def read_attribute_for_serialization(key)
+    if %w[created_from last_accessed_from].include?(key)
+      send(key).to_s
+    else
+      super
+    end
+  end
 end

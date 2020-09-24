@@ -66,6 +66,31 @@ RSpec.describe 'V1::Sessions', type: :request do
       end
     end
 
+    path '/v1/sessions' do
+      let!(:active_session) { create(:session, user: current_user) }
+      let!(:expired_session) { create(:expired_session, user: current_user) }
+
+      get 'List active sessions for the current user' do
+        produces 'application/json'
+        security [bearer: []]
+
+        response '200', 'active sessions for the current user' do
+          schema type: :object, required: %w[sessions], properties: {
+            sessions: {
+              type: :array,
+              items: { '$ref': '#/components/schemas/session' }
+            }
+          }
+
+          test_with_response! do |data|
+            expect(data[:sessions]).to include(a_hash_including(id: current_session.id))
+            expect(data[:sessions]).to include(a_hash_including(id: active_session.id))
+            expect(data[:sessions]).not_to include(a_hash_including(id: expired_session.id))
+          end
+        end
+      end
+    end
+
     path '/v1/sessions/{id}' do
       delete 'Delete a session' do
         consumes 'application/json'

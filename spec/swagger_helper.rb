@@ -68,6 +68,20 @@ RSpec.configure do |config|
       paths: {},
       components: {
         schemas: {
+          session: {
+            type: :object,
+            properties: {
+              id: { type: :string, readOnly: true },
+              created_at: { type: :string, readOnly: true },
+              updated_at: { type: :string, readOnly: true },
+              user_id: { type: :string, readOnly: true },
+              user_agent: { type: :string, readOnly: true },
+              created_from: { type: :string, readOnly: true },
+              last_accessed_from: { type: :string, readOnly: true },
+              last_accessed_at: { type: :string, readOnly: true },
+              expires_at: { type: :string, readOnly: true }
+            }
+          },
           user: {
             type: :object,
             properties: {

@@ -22,6 +22,10 @@ Metrics/MethodLength:
   Exclude:
     - db/migrate/*.rb
 
+Rails/SkipsModelValidations:
+  Exclude:
+    - spec/factories/**/*.rb
+
 RSpec/EmptyExampleGroup:
   Exclude:
     - spec/integration/**/*.rb

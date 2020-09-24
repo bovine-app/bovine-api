@@ -5,7 +5,9 @@ module V1
   class SessionsController < ApplicationController
     include SessionCreatable
 
-    before_action :current_user, only: %i[destroy]
+    before_action :current_user, only: %i[index destroy]
+
+    def index; end
 
     def create
       @current_user = User.find_by(email: session_create_params[:email]).authenticate(session_create_params[:password])

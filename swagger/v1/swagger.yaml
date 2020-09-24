@@ -57,6 +57,25 @@ paths:
         '401':
           description: unauthorized
           content: {}
+  "/v1/sessions":
+    get:
+      summary: List active sessions for the current user
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: active sessions for the current user
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - sessions
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/session"
   "/v1/sessions/{id}":
     delete:
       summary: Delete a session
@@ -250,6 +269,36 @@ paths:
               - current_password
 components:
   schemas:
+    session:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          readOnly: true
+        updated_at:
+          type: string
+          readOnly: true
+        user_id:
+          type: string
+          readOnly: true
+        user_agent:
+          type: string
+          readOnly: true
+        created_from:
+          type: string
+          readOnly: true
+        last_accessed_from:
+          type: string
+          readOnly: true
+        last_accessed_at:
+          type: string
+          readOnly: true
+        expires_at:
+          type: string
+          readOnly: true
     user:
       type: object
       properties:
