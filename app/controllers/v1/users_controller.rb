@@ -25,6 +25,7 @@ module V1
 
     def destroy
       current_user.destroy!
+      reset_session
 
       head :no_content
     end
