@@ -17,19 +17,22 @@ module V1
     end
 
     def destroy
-      if session_id
-        raise Errors::UnprocessableEntityError if session_id == current_session.id
-
-        current_user.sessions.find(session_id).destroy!
-      else
-        current_session.destroy!
-        reset_session unless session.empty?
-      end
-
+      session_id ? destroy_other_session : destroy_current_session
       head :no_content
     end
 
     private
+
+    def destroy_current_session
+      current_session.destroy!
+      reset_session unless session.empty?
+    end
+
+    def destroy_other_session
+      raise Errors::UnprocessableEntityError if session_id == current_session.id
+
+      current_user.sessions.find(session_id).destroy!
+    end
 
     def session_params
       @session_params ||= params.require(:session).permit(:email, :password)
