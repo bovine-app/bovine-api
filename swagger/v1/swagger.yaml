@@ -57,6 +57,27 @@ paths:
         '401':
           description: unauthorized
           content: {}
+  "/v1/sessions/{id}":
+    delete:
+      summary: Delete a session
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: session deleted
+          content: {}
+        '401':
+          description: unauthorized
+          content: {}
+        '422':
+          description: cannot delete current session
+          content: {}
   "/v1/user":
     post:
       summary: Create a new user

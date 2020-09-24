@@ -15,8 +15,14 @@ module V1
     end
 
     def destroy
-      current_session.destroy!
-      reset_session unless session.empty?
+      if session_id
+        raise Errors::UnprocessableEntityError if session_id == current_session.id
+
+        current_user.sessions.find(session_id).destroy!
+      else
+        current_session.destroy!
+        reset_session unless session.empty?
+      end
 
       head :no_content
     end
@@ -31,6 +37,10 @@ module V1
       @session_create_params ||= session_params.tap do |param|
         param.require(%i[email password])
       end
+    end
+
+    def session_id
+      params.permit(:id)[:id]
     end
   end
 end

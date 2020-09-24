@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   defaults format: :json do
     namespace :v1 do
       resource :session, only: %i[create destroy]
+      resources :sessions, only: %i[destroy]
       resource :user
     end
   end

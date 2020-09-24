@@ -31,4 +31,11 @@ module Errors
       :forbidden
     end
   end
+
+  # Represents an HTTP 422 Unprocessable Entity error.
+  class UnprocessableEntityError < BaseError
+    def code
+      :unprocessable_entity
+    end
+  end
 end
