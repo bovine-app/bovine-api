@@ -4,6 +4,14 @@ require 'rails_helper'
 
 # Helpers for RSwag example groups.
 module SwaggerGroupHelpers
+  def with_current_user!
+    create_user_with_session!
+
+    let(:Authorization) { "Bearer #{current_session.to_jwt}" }
+
+    yield if block_given?
+  end
+
   def test_with_response!(&block)
     submit_request!
 
@@ -14,6 +22,11 @@ module SwaggerGroupHelpers
   end
 
   private
+
+  def create_user_with_session!
+    let(:current_user) { create(:user) }
+    let(:current_session) { create(:session, user: current_user) }
+  end
 
   def submit_request!
     let(:metadata) { |example| example.metadata }

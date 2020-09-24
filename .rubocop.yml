@@ -31,8 +31,8 @@ RSpec/ScatteredSetup:
     - spec/integration/**/*.rb
 
 RSpec/VariableName:
-  Exclude:
-    - spec/integration/**/*.rb
+  IgnoredPatterns:
+    - ^Authorization$
 
 Style/Documentation:
   Exclude:
