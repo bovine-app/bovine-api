@@ -29,7 +29,7 @@ module V1
     end
 
     def destroy_other_session
-      raise Errors::UnprocessableEntityError if session_id == current_session.id
+      raise HTTP::Errors::UnprocessableEntityError if session_id == current_session.id
 
       current_user.sessions.find(session_id).destroy!
     end

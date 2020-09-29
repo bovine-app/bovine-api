@@ -37,7 +37,7 @@ module V1
     end
 
     def require_current_password
-      raise Errors::ForbiddenError unless current_user.authenticate(current_password)
+      raise HTTP::Errors::ForbiddenError unless current_user.authenticate(current_password)
     end
 
     def user_params

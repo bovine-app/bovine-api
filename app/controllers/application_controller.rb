@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
 
   rescue_from ActionController::ParameterMissing, with: :rescue_parameter_missing
   rescue_from ActiveRecord::RecordInvalid, with: :rescue_record_invalid
-  rescue_from Errors::BaseError, with: :rescue_error
+  rescue_from HTTP::Errors::BaseError, with: :rescue_http_error
 
   protected
 
@@ -32,13 +32,13 @@ class ApplicationController < ActionController::API
          JWT::ExpiredSignature,
          JWT::ImmatureSignature,
          JWT::VerificationError
-    raise Errors::UnauthorizedError
+    raise HTTP::Errors::UnauthorizedError
   end
 
   def current_user
     @current_user ||= current_session.user
   rescue ActiveRecord::RecordNotFound
-    raise Errors::UnauthorizedError
+    raise HTTP::Errors::UnauthorizedError
   end
 
   private
@@ -66,7 +66,7 @@ class ApplicationController < ActionController::API
     }
   end
 
-  def rescue_error(exception)
+  def rescue_http_error(exception)
     exception.handle(self)
     head exception.code
   end
