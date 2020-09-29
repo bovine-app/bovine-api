@@ -24,7 +24,7 @@ class ApplicationController < ActionController::API
   end
 
   def current_session
-    @current_session ||= Session.from_jwt(session.empty? ? bearer_token : session[:jwt]).tap do |sess|
+    @current_session ||= Session.from_jwt(jwt).tap do |sess|
       sess.update!(last_accessed_from: request.remote_ip, last_accessed_at: Time.zone.now)
     end
   rescue ActiveRecord::RecordNotFound,
@@ -45,6 +45,10 @@ class ApplicationController < ActionController::API
 
   def bearer_token
     request.authorization&.match(/\ABearer (\S+)\z/)&.captures&.first
+  end
+
+  def jwt
+    @jwt ||= session.empty? ? bearer_token : session[:jwt]
   end
 
   def rescue_parameter_missing(exception)
