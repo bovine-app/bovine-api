@@ -31,4 +31,22 @@ RSpec.describe Session, type: :model do
     it { is_expected.to include expired_session }
     it { is_expected.not_to include active_session }
   end
+
+  describe '#expires_at' do
+    subject { session.expires_at.to_s }
+
+    before { travel_to session.created_at + 15.days }
+
+    let(:session) { create(:session) }
+    let(:now) { session.created_at + 15.days }
+
+    it { is_expected.to eql (session.created_at + 30.days).to_s }
+    it { is_expected.to eql (now + 15.days).to_s }
+
+    context 'when updated' do
+      before { session.save! }
+
+      it { is_expected.to eql (now + 30.days).to_s }
+    end
+  end
 end
