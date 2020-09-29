@@ -5,6 +5,8 @@ class ApplicationRecord < ActiveRecord::Base
 
   PROTECTED_ATTRIBUTES = [].freeze
 
+  scope :not, ->(scope) { where(scope.arel.constraints.reduce(:and).not) }
+
   # Prevent protected attributes of the model from being exposed in serialized
   # representations of the model.
   def serializable_hash(options = nil)

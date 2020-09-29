@@ -11,8 +11,8 @@ class Session < ApplicationRecord
 
   before_save :extend_life
 
-  scope :active, -> { where('expires_at >= ?', Time.zone.now) }
-  scope :expired, -> { where('expires_at < ?', Time.zone.now) }
+  scope :active, -> { where(expires_at: Time.zone.now..) }
+  scope :expired, -> { self.not(active) }
 
   class << self
     def from_jwt(jwt)
