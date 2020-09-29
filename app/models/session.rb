@@ -22,8 +22,6 @@ class Session < ApplicationRecord
   end
 
   def as_jwt
-    iat = created_at.to_i
-
     {
       sub: user_id,
       exp: expires_at.to_i,
@@ -41,6 +39,10 @@ class Session < ApplicationRecord
 
   def extend_life
     self.expires_at = 30.days.from_now
+  end
+
+  def iat
+    @iat ||= created_at.to_i
   end
 
   def read_attribute_for_serialization(key)
