@@ -28,6 +28,9 @@ paths:
                     - email
                     - created_at
                     - updated_at
+        '401':
+          description: invalid credentials
+          content: {}
       requestBody:
         content:
           application/json:
@@ -93,6 +96,9 @@ paths:
           content: {}
         '401':
           description: unauthorized
+          content: {}
+        '404':
+          description: invalid session ID
           content: {}
         '422':
           description: cannot delete current session

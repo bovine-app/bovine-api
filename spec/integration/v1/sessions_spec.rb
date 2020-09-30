@@ -47,16 +47,18 @@ RSpec.describe 'V1::Sessions', type: :request do
           end
         end
 
-        response '401', 'incorrect email address' do
-          before { session[:session][:email] = Faker::Internet.safe_email }
+        response '401', 'invalid credentials' do
+          context 'with an incorrect email address' do
+            before { session[:session][:email] = Faker::Internet.safe_email }
 
-          run_test!
-        end
+            run_test!
+          end
 
-        response '401', 'incorrect password' do
-          before { session[:session][:password] = Faker::Internet.password }
+          context 'with an incorrect password' do
+            before { session[:session][:email] = Faker::Internet.password }
 
-          run_test!
+            run_test!
+          end
         end
       end
 
