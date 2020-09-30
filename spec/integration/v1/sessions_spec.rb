@@ -124,6 +124,12 @@ RSpec.describe 'V1::Sessions', type: :request do
           run_test!
         end
 
+        response '404', 'invalid session ID' do
+          let(:id) { Digest::UUID.uuid_v4 }
+
+          run_test!
+        end
+
         response '422', 'cannot delete current session' do
           let(:id) { current_session.id }
 
