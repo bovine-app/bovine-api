@@ -26,9 +26,7 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_user
-    @current_user ||= session_from_jwt.user
-  rescue ActiveRecord::RecordNotFound
-    raise HTTP::Errors::UnauthorizedError
+    @current_user = session_from_jwt.user
   end
 
   private
