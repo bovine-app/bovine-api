@@ -33,11 +33,13 @@ module V1
     private
 
     def current_password
-      params.require(:current_password)
+      @current_password ||= params.require(:current_password)
     end
 
     def require_current_password
-      raise HTTP::Errors::ForbiddenError unless current_user.authenticate(current_password)
+      current_user.authenticate!(current_password)
+    rescue Errors::AuthenticationError
+      raise HTTP::Errors::ForbiddenError
     end
 
     def user_params

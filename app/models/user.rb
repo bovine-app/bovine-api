@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # An individual user account.
+# :reek:MissingSafeMethod { exclude: [ authenticate!, find_and_authenticate! ] }
 class User < ApplicationRecord
   PROTECTED_ATTRIBUTES = %i[password password_confirmation password_digest].freeze
 
@@ -13,6 +14,18 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: { if: :password }
 
   before_validation :downcase_email
+
+  class << self
+    def find_and_authenticate!(email, unencrypted_password)
+      find_by!(email: email).authenticate!(unencrypted_password)
+    rescue Errors::AuthenticationError
+      raise ActiveRecord::RecordNotFound
+    end
+  end
+
+  def authenticate!(unencrypted_password)
+    authenticate(unencrypted_password) or raise Errors::AuthenticationError
+  end
 
   private
 

@@ -10,7 +10,7 @@ module V1
     def index; end
 
     def create
-      @current_user = User.find_by!(email: session_create_params[:email]).authenticate(session_create_params[:password])
+      @current_user = User.find_and_authenticate!(session_create_params[:email], session_create_params[:password])
       create_session
 
       render 'v1/users/show', status: :created
