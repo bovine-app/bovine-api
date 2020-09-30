@@ -46,6 +46,18 @@ RSpec.describe 'V1::Sessions', type: :request do
             expect(data[:user][:id]).to eql current_user.id
           end
         end
+
+        response '401', 'incorrect email address' do
+          before { session[:session][:email] = Faker::Internet.safe_email }
+
+          run_test!
+        end
+
+        response '401', 'incorrect password' do
+          before { session[:session][:password] = Faker::Internet.password }
+
+          run_test!
+        end
       end
 
       delete 'Delete the current session' do
