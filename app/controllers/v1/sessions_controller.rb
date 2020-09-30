@@ -5,7 +5,7 @@ module V1
   class SessionsController < ApplicationController
     include SessionCreatable
 
-    before_action :current_user, only: %i[index destroy]
+    before_action :authenticate_user, only: %i[index destroy]
 
     def index; end
 

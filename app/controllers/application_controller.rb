@@ -5,7 +5,9 @@ class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::RequestForgeryProtection
 
-  helper_method :current_session, :current_user
+  attr_reader :current_session, :current_user
+
+  helper_method :current_user
 
   protect_from_forgery with: :null_session
 
@@ -23,20 +25,8 @@ class ApplicationController < ActionController::API
     Rails.application.config.action_controller.allow_forgery_protection != false
   end
 
-  def current_session
-    @current_session ||= Session.from_jwt(jwt).tap do |sess|
-      sess.update!(last_accessed_from: request.remote_ip, last_accessed_at: Time.zone.now)
-    end
-  rescue ActiveRecord::RecordNotFound,
-         JWT::DecodeError,
-         JWT::ExpiredSignature,
-         JWT::ImmatureSignature,
-         JWT::VerificationError
-    raise HTTP::Errors::UnauthorizedError
-  end
-
-  def current_user
-    @current_user ||= current_session.user
+  def authenticate_user
+    @current_user ||= session_from_jwt.user
   rescue ActiveRecord::RecordNotFound
     raise HTTP::Errors::UnauthorizedError
   end
@@ -73,6 +63,18 @@ class ApplicationController < ActionController::API
   def rescue_http_error(exception)
     exception.handle(self)
     head exception.code
+  end
+
+  def session_from_jwt
+    @current_session ||= Session.from_jwt(jwt).tap do |sess|
+      sess.update!(last_accessed_from: request.remote_ip, last_accessed_at: Time.zone.now)
+    end
+  rescue ActiveRecord::RecordNotFound,
+         JWT::DecodeError,
+         JWT::ExpiredSignature,
+         JWT::ImmatureSignature,
+         JWT::VerificationError
+    raise HTTP::Errors::UnauthorizedError
   end
 
   def set_csrf_cookie

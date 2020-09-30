@@ -5,7 +5,7 @@ module V1
   class UsersController < ApplicationController
     include SessionCreatable
 
-    before_action :current_user, except: %i[create]
+    before_action :authenticate_user, except: %i[create]
     before_action :require_current_password, only: %i[update destroy]
 
     def create
