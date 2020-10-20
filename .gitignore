@@ -31,3 +31,6 @@
 
 # Ignore code coverage output
 /coverage
+
+*.pem
+mkmf.log

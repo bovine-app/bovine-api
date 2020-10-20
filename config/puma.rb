@@ -10,13 +10,24 @@ max_threads_count = ENV.fetch('RAILS_MAX_THREADS', 5)
 min_threads_count = ENV.fetch('RAILS_MIN_THREADS') { max_threads_count }
 threads min_threads_count, max_threads_count
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-#
-port        ENV.fetch('PORT', 3000)
-
 # Specifies the `environment` that Puma will run in.
 #
-environment ENV.fetch('RAILS_ENV', 'development')
+_environment = ENV.fetch('RAILS_ENV', 'development')
+environment _environment
+
+# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
+#
+_port = ENV.fetch('PORT', 3000)
+
+if _environment == 'development'
+  ssl_bind 'localhost', _port, {
+    cert: ENV.fetch('RAILS_SSL_CRT') { File.join(Dir.pwd, 'localhost%2B2.pem') },
+    key: ENV.fetch('RAILS_SSL_KEY') { File.join(Dir.pwd, 'localhost%2B2-key.pem') },
+    verify_mode: 'none'
+  }
+else
+  port _port
+end
 
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch('PIDFILE', 'tmp/pids/server.pid')
