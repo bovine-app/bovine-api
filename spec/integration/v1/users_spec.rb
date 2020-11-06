@@ -22,6 +22,7 @@ RSpec.describe 'V1::Users', type: :request do
 
         let(:user) do
           base_user = build(:user)
+
           {
             user: {
               email: base_user.email,
@@ -40,8 +41,7 @@ RSpec.describe 'V1::Users', type: :request do
             }
           }
 
-          run_test! do |response|
-            data = JSON.parse(response.body).with_indifferent_access
+          test_with_response! do |data|
             expect(User.find(data[:user][:id]).email).to eql user[:user][:email]
           end
         end
