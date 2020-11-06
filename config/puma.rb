@@ -12,21 +12,21 @@ threads min_threads_count, max_threads_count
 
 # Specifies the `environment` that Puma will run in.
 #
-_environment = ENV.fetch('RAILS_ENV', 'development')
-environment _environment
+ENVIRONMENT = ENV.fetch('RAILS_ENV', 'development')
+environment ENVIRONMENT
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-_port = ENV.fetch('PORT', 3000)
+PORT = ENV.fetch('PORT', 3000)
 
-if _environment == 'development'
-  ssl_bind 'localhost', _port, {
+if ENVIRONMENT == 'development'
+  ssl_bind 'localhost', PORT, {
     cert: ENV.fetch('RAILS_SSL_CRT') { File.join(Dir.pwd, 'localhost%2B2.pem') },
     key: ENV.fetch('RAILS_SSL_KEY') { File.join(Dir.pwd, 'localhost%2B2-key.pem') },
     verify_mode: 'none'
   }
 else
-  port _port
+  port PORT
 end
 
 # Specifies the `pidfile` that Puma will use.
