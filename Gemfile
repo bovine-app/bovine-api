@@ -51,7 +51,7 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  gem 'solargraph'
+  gem 'solargraph', github: 'zaratan/solargraph', branch: 'fix_rubocop_1_0'
 end
 
 gem 'rswag-api'
