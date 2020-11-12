@@ -27,13 +27,20 @@ module V1
 
     def destroy_current_session
       current_session.destroy!
-      reset_session unless session.empty?
+      @current_user = nil
+
+      clear_session unless session.empty?
     end
 
     def destroy_other_session
       raise HTTP::Errors::UnprocessableEntityError if session_id == current_session.id
 
       current_user.sessions.find(session_id).destroy!
+    end
+
+    def clear_session
+      reset_session
+      cookies.delete(:csrf_token)
     end
 
     def session_params
