@@ -9,9 +9,9 @@ class ApplicationController < ActionController::API
 
   helper_method :current_user
 
-  protect_from_forgery with: :null_session
+  protect_from_forgery with: :null_session, if: -> { current_user }
 
-  after_action :set_csrf_cookie, unless: -> { session.empty? }
+  after_action :set_csrf_cookie, if: -> { current_user }, unless: -> { session.empty? }
 
   rescue_from ActionController::ParameterMissing, with: :rescue_parameter_missing
   rescue_from ActiveRecord::RecordInvalid, with: :rescue_record_invalid
