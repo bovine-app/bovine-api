@@ -58,3 +58,5 @@ gem 'rswag-api'
 gem 'rswag-ui'
 
 gem 'jwt', '~> 2.2'
+
+gem 'bullet'
