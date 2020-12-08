@@ -39,7 +39,7 @@ end
 module SwaggerExampleHelpers
   def parse_data_and_call(example, &block)
     data = JSON.parse(response.body).with_indifferent_access
-    example.instance_exec(data, &block) if block_given?
+    example.instance_exec(data, &block) if block
   end
 end
 
