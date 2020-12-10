@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # An individual user account.
-# :reek:MissingSafeMethod { exclude: [ authenticate!, find_and_authenticate! ] }
+# :reek:MissingSafeMethod { exclude: [ authenticate!, downcase_email!, find_and_authenticate! ] }
 class User < ApplicationRecord
   PROTECTED_ATTRIBUTES = %i[password password_confirmation password_digest].freeze
 
@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 8, allow_nil: true }, presence: { if: :password_confirmation }
   validates :password_confirmation, presence: { if: :password }
 
-  before_validation :downcase_email
+  before_validation :downcase_email!
 
   class << self
     def find_and_authenticate!(email, unencrypted_password)
@@ -37,7 +37,7 @@ class User < ApplicationRecord
   # duplicate account with email addresses that differ only in case, when their
   # email provider treats them as the same address, compared to needing to
   # support distinct uses with email addresses that differ only in case.
-  def downcase_email
+  def downcase_email!
     email&.downcase!
   end
 end
