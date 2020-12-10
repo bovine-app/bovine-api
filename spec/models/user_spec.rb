@@ -78,18 +78,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#password_digest' do
-    subject(:digest) { user.password_digest }
-
-    it { expect { digest }.to raise_error NoMethodError }
-  end
-
-  describe '#password_digest=' do
-    subject(:digest) { user.password_digest = 'not-a-valid-bcrypt-hash' }
-
-    it { expect { digest }.to raise_error NoMethodError }
-  end
-
   # Verify that the user's password is not exposed in serialization of the user
   # object, without otherwise affecting the behavior of
   # ActiveModel::Serialization.serializable_hash.

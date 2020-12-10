@@ -40,12 +40,4 @@ class User < ApplicationRecord
   def downcase_email
     email&.downcase!
   end
-
-  def password_digest # rubocop:disable Lint/UselessMethodDefinition
-    super
-  end
-
-  def password_digest=(val) # rubocop:disable Lint/UselessMethodDefinition
-    super
-  end
 end
