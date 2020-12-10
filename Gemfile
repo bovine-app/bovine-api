@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.3'
+gem 'rails', '~> 6.1.0'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -51,7 +51,7 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  gem 'solargraph', github: 'zaratan/solargraph', branch: 'fix_rubocop_1_0'
+  gem 'solargraph', github: 'castwide/solargraph'
 end
 
 gem 'rswag-api'
@@ -59,4 +59,4 @@ gem 'rswag-ui'
 
 gem 'jwt', '~> 2.2'
 
-gem 'bullet'
+gem 'bullet', github: 'flyerhzm/bullet'
