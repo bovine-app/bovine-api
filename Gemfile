@@ -51,7 +51,7 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  gem 'solargraph', github: 'castwide/solargraph'
+  gem 'solargraph'
 end
 
 gem 'rswag-api'
@@ -59,4 +59,4 @@ gem 'rswag-ui'
 
 gem 'jwt', '~> 2.2'
 
-gem 'bullet', github: 'flyerhzm/bullet'
+gem 'bullet'
